@@ -1,0 +1,12 @@
+mongo/*
+mysql/*
+nginx/*
+pgsql/*
+php/*
+supervisor/*
+!mongo/.gitkeep
+!mysql/.gitkeep
+!nginx/.gitkeep
+!pgsql/.gitkeep
+!php/.gitkeep
+!supervisor/.gitkeep
