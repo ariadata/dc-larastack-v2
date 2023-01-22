@@ -8,7 +8,7 @@
 ### Laravel Stack for local and production , includes:
 * workspace based on [s6-overlay](https://github.com/just-containers/s6-overlay)
   * nginx
-  * php-8.1(fpm)
+  * php-fpm
 * supervisor (schedule , queue ,short-schedule , horizon , ...)
 * MariaDb
 * PHPMyAdmin
@@ -35,8 +35,9 @@ bash init.sh
 ### 2️⃣ Config bash_liases
 Copy these lines into `.bash_aliases` of your system :
 ```bash
-alias larastack='docker-compose exec -u webuser workspace'
-alias larastack-supervisor='docker-compose exec -u webuser supervisor supervisorctl'
+larastack(){echo "docker-compose exec workspace su webuser -c '$@'" | bash}
+larastack-supervisor(){echo "docker-compose exec supervisor su webuser -c 'supervisorctl $@'" | bash}
+alias lpa='larastack php artisan'
 ```
 ### 3️⃣ Prepare and run
 ```bash
