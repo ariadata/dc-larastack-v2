@@ -35,12 +35,8 @@ bash init.sh
 ### 2️⃣ Config bash_liases
 Copy these lines into `.bash_aliases` of your system :
 ```bash
-larastack(){
-	echo "docker-compose exec workspace su webuser -c '$@'" | bash
-}
-larastack-supervisor(){
-	echo "docker-compose exec supervisor su webuser -c 'supervisorctl $@'" | bash
-}
+alias larastack='docker-compose exec -u webuser workspace'
+alias larastack-supervisor='docker-compose exec -u webuser supervisor supervisorctl'
 alias lpa='larastack php artisan'
 ```
 ### 3️⃣ Prepare and run
