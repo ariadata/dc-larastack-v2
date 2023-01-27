@@ -8,7 +8,7 @@
 ### Laravel Stack for local and production (customizable) , includes:
 * workspace based on [s6-overlay](https://github.com/just-containers/s6-overlay)
   * nginx
-  * php-fpm
+  * php-fpm (available versions are 7.4 ,8.0 ,8.1 ,8.2)
 * supervisor ([schedule](https://laravel.com/docs/9.x/scheduling) , [queue](https://laravel.com/docs/9.x/queues) ,[short-schedule](https://github.com/spatie/laravel-short-schedule) , [horizon](https://laravel.com/docs/9.x/horizon) , ...)
 * MariaDb
 * PostgreSQL
