@@ -1,0 +1,164 @@
+version: '3.7'
+
+networks:
+  larastack-network-changeme:
+
+services:
+  workspace:
+    image: 'ariadata/php-${STACK_PHP_VERSION}:fpm-nginx'
+    container_name: ${COMPOSE_PROJECT_NAME}_workspace
+    restart: unless-stopped
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    volumes:
+      - './src:/var/www/html'
+      - './configs/nginx/:/etc_custom/nginx/'
+      - './configs/php/cli-override.ini:/etc_custom/php/${STACK_PHP_VERSION}/cli/conf.d/99-override.ini'
+      - './configs/php/www.conf:/etc_custom/php/${STACK_PHP_VERSION}/fpm/pool.d/www.conf'
+      - './configs/logrotate.d/:/etc_custom/logrotate.d/'
+      - './configs/cron/:/etc_custom/cron.d/'
+      - './logs/php:/var/log/php'
+      - './logs/nginx:/var/log/nginx'
+    environment:
+      TZ: '${DC_TZ}'
+      PUID: '${UID:-1000}'
+      PGID: '${GID:-1000}'
+    ports:
+      - '${DC_NGINX_HTTP_PORT:-80}:80'
+      - '${DC_NGINX_HTTPS_PORT:-443}:443'
+    #      - '${DC_LARAVEL_VITE_PORT:-5173}:5173'
+    #      - '${DC_LARAVEL_HMR_PORT:-8080}:8080'
+    depends_on:
+      - redis
+      - RDBMS_SERVICE_NAME
+    networks:
+      - larastack-network-changeme
+
+  supervisor:
+    image: 'ariadata/php-${STACK_PHP_VERSION}:supervisor'
+    container_name: ${COMPOSE_PROJECT_NAME}_supervisor
+    restart: unless-stopped
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    volumes:
+      - './src:/var/www/html'
+      - './configs/supervisor/:/etc/supervisor/conf.d'
+      - './configs/php/cli-override.ini:/etc_custom/php/${STACK_PHP_VERSION}/cli/conf.d/99-override.ini'
+      - './logs/php:/var/log/php'
+      - './logs/supervisor/:/var/log/supervisor'
+    environment:
+      TZ: '${DC_TZ}'
+      PUID: '${UID:-1000}'
+      PGID: '${GID:-1000}'
+    depends_on:
+      - workspace
+    healthcheck:
+      test: [ "CMD", "supervisorctl", "status" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - larastack-network-changeme
+
+  redis:
+    image: 'redis:7-bullseye'
+    container_name: ${COMPOSE_PROJECT_NAME}_redis
+    restart: unless-stopped
+    user: "${UID:-1000}:${GID:-1000}"
+    ports:
+      - '${DC_REDIS_PORT:-6379}:6379'
+    volumes:
+      - './data/redis:/data'
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      retries: 3
+      timeout: 5s
+    networks:
+      - larastack-network-changeme
+
+##-- MYSQL BOF --##
+  mysql:
+    image: 'mariadb:10.8'
+    container_name: ${COMPOSE_PROJECT_NAME}_mysql
+    restart: unless-stopped
+    user: "${UID:-1000}:${GID:-1000}"
+    command: "--character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --default-authentication-plugin=mysql_native_password"
+    ports:
+      - '${DC_MYSQL_DB_PORT:-3306}:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DC_MYSQL_DB_ROOTPASS}'
+      MYSQL_DATABASE: '${DC_MYSQL_DB_NAME}'
+      MYSQL_USER: '${DC_MYSQL_DB_USER}'
+      MYSQL_PASSWORD: '${DC_MYSQL_DB_PASS}'
+      TZ: '${DC_TZ}'
+    volumes:
+      - './configs/mysql/my-cnf-overrides.cnf:/etc/mysql/conf.d/overrides.cnf'
+      - './data/mysql:/var/lib/mysql'
+      - './logs/mysql:/var/log/mysql'
+    healthcheck:
+      test: [ "CMD", "mysqladmin" , "ping", "-h", "localhost" ]
+      retries: 3
+      timeout: 5s
+    networks:
+      - larastack-network-changeme
+##-- MYSQL EOF --##
+
+##-- PGSQL BOF --##
+  pgsql:
+    image: 'postgres:15-bullseye'
+    container_name: ${COMPOSE_PROJECT_NAME}_pgsql
+    restart: unless-stopped
+    user: "${UID:-1000}:${GID:-1000}"
+    ports:
+      - '${DC_PGSQL_DB_PORT:-5432}:5432'
+    environment:
+      PGPASSWORD: '${DC_PGSQL_DB_ROOT_PASSWORD}'
+      POSTGRES_DB: '${DC_PGSQL_DB_NAME}'
+      POSTGRES_USER: '${DC_PGSQL_DB_USER}'
+      POSTGRES_PASSWORD: '${DC_PGSQL_DB_PASS}'
+    volumes:
+      #      - './configs/pgsql/postgresql.conf:/etc/postgresql/postgresql.conf'
+      #      - './configs/pgsql/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf'
+      - './data/pgsql:/var/lib/postgresql/data'
+    #      - './logs/pgsql:/var/log/postgresql'
+    #    command: "-c config_file=/etc/postgresql/postgresql.conf"
+    #    command: ["sh", "-c", "chown 999:999 /var/lib/postgresql/data"]
+    #    command: /bin/bash -c "mkdir -p /logs && chmod -R 777 /logs && postgres -c logging_collector=on -c log_destination=stderr -c log_directory=/logs"
+    #    command: /bin/bash -c "mkdir -p /var/lib/postgresql/data && chown 1000:1000 /var/lib/postgresql/data && chmod -R 777 /var/lib/postgresql/data && postgres"
+    # https://bytemeta.vip/repo/docker-library/postgres/issues/917
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${DC_PGSQL_DB_USER}" ]
+      timeout: 5s
+      retries: 3
+    networks:
+      - larastack-network-changeme
+##-- PGSQL EOF --##
+
+##-- MONGO BOF --##
+  mongo:
+    image: 'mongo:6-focal'
+    container_name: ${COMPOSE_PROJECT_NAME}_mongo
+    restart: unless-stopped
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: '${DC_MONGO_DB_USER}'
+      MONGO_INITDB_ROOT_PASSWORD: '${DC_MONGO_DB_PASS}'
+      TZ: '${DC_TZ}'
+    ports:
+      - '${DC_MONGO_DB_PORT:-27017}:27017'
+    volumes:
+      - './data/mongo:/data/db'
+    networks:
+      - larastack-network-changeme
+##-- MONGO EOF --##
+
+  adminer:
+    image: 'dockette/adminer:full'
+    container_name: ${COMPOSE_PROJECT_NAME}_adminer
+    restart: unless-stopped
+    ports:
+      - '${DC_ADMINER_HTTP_PORT:-8089}:80'
+    networks:
+      - larastack-network-changeme
+
+

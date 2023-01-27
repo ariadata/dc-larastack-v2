@@ -1,76 +1,63 @@
-# dc-larastack v2 Starter-Kit
+# Laravel docker-compose stack v2
 [![Build Status](https://files.ariadata.co/file/ariadata_logo.png)](https://ariadata.co)
 
 ![](https://img.shields.io/github/stars/ariadata/dc-larastack-v2.svg)
 ![](https://img.shields.io/github/watchers/ariadata/dc-larastack-v2.svg)
 ![](https://img.shields.io/github/forks/ariadata/dc-larastack-v2.svg)
 
-### Laravel Stack for local and production , includes:
+### Laravel Stack for local and production (customizable) , includes:
 * workspace based on [s6-overlay](https://github.com/just-containers/s6-overlay)
   * nginx
   * php-fpm
-* supervisor (schedule , queue ,short-schedule , horizon , ...)
+* supervisor ([schedule](https://laravel.com/docs/9.x/scheduling) , [queue](https://laravel.com/docs/9.x/queues) ,[short-schedule](https://github.com/spatie/laravel-short-schedule) , [horizon](https://laravel.com/docs/9.x/horizon) , ...)
 * MariaDb
-* PHPMyAdmin
 * PostgreSQL
 * MongoDb
 * Redis
-* npm
-* zabbix-agent
-* fresh [laravel 9.x](https://laravel.com/docs/9.x) from these laravel repos ( [basic](https://github.com/ariadata/dc-larastack-v2-laravel-basic) or [jetstream](https://github.com/ariadata/dc-larastack-v2-laravel-jetstream) ) that configured for this stack.
+* [Adminer](https://hub.docker.com/_/adminer/) full
+* npm included
+* fresh custom [laravel 9.x](https://laravel.com/docs/9.x) from [this repo](https://github.com/ariadata/dc-larastack-v2-laravel-basic) that customized for this stack.
 
-### This needs :
-
-* 🧪 for **Local** : dockerhost : install from [link-1](https://github.com/ariadata/dockerhost-sh) or [link-2](https://github.com/ariadata/ubuntu-sh)
-
-* 🌐 for **Production** : [dockerhost](https://github.com/ariadata/dockerhost-sh) + [Nginx-Proxy-Manager](https://github.com/ariadata/dc-nginxproxymanager)
+### This needs `dockerhost` , install from [here](https://github.com/ariadata/dockerhost-sh)
 
 ---
 # ✅ Usage : 
-### 1️⃣ Install and initialize
-```bash
-git clone https://github.com/ariadata/dc-larastack-v2.git dc-larastack && cd dc-larastack
-bash init.sh
-```
-### 2️⃣ Config bash_liases
-Copy these lines into `.bash_aliases` of your system :
+### 1️⃣ Config bash_aliases
+Copy these lines into `.bash_aliases` or `.bashrc` of your system :
 ```bash
 alias larastack='docker-compose exec -u webuser workspace'
 alias larastack-supervisor='docker-compose exec -u webuser supervisor supervisorctl'
 alias lpa='larastack php artisan'
 ```
+### 2️⃣ Initialize
+```bash
+git clone https://github.com/ariadata/dc-larastack-v2.git dc-larastack && cd dc-larastack
+
+bash 1-init.sh
+```
+
 ### 3️⃣ Prepare and run
 ```bash
-docker-compose up -d
-docker-compose exec -u webuser workspace composer update
-docker-compose exec -u webuser workspace php artisan key:generate
-docker-compose exec -u webuser workspace php artisan migrate:fresh --force
-
-docker-compose exec -u webuser workspace ./vendor/bin/pint
-
-docker-compose exec -u webuser workspace npm install
-docker-compose exec -u webuser workspace npm run build
-
-docker-compose exec -u webuser workspace ./vendor/bin/pest
-docker-compose exec -u webuser supervisor supervisorctl restart laravel-schedule laravel-short-schedule
+bash 2-prepare.sh
 ```
 ### ☑️ Usage Commands
-##### Commands :
+##### Example commands :
 ```bash
 larastack composer update
-larastack composer php artisan key:generate
-larastack composer php artisan migrate:fresh --force
-larastack composer ./vendor/bin/pint
-larastack-supervisor restart all
-
-# php artisan test
-larastack php artisan test
-
-# composer install XXX
 larastack composer require XXX
 
-# restart short-schedule and shcedule
-larastack-supervisor restart laravel-schedule laravel-short-schedule
+# laravel artisan commands
+# lpa = larastack php artisan
+lpa make:controller ExampleController
+lpa key:generate
+lpa migrate:fresh --force
+lpa make:migration create_example_table
+lpa test
+
+# supervisor commands
+larastack-supervisor restart all
+larastack-supervisor status all
+larastack-supervisor restart laravel-schedule laravel-short-schedule horizon:
 
 # pint/clean code
 larastack ./vendor/bin/pint
@@ -84,8 +71,10 @@ larastack npm install
 larastack npm run build
 
 ```
-##### 📘 Other commands :
-
 ---
-## 🔗 Other Links
-* [sample](https://sample.com) #description
+# 📝 Notes :
+* `larastack` is alias for `docker-compose exec -u webuser workspace`
+* `larastack-supervisor` is alias for `docker-compose exec -u webuser supervisor supervisorctl`
+* `lpa` is alias for `larastack php artisan`
+
+

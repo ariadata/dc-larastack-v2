@@ -2,7 +2,7 @@
 process_name=%(program_name)s
 command=php /var/www/html/artisan schedule:work
 directory=/var/www/html/
-autostart=true
+autostart=false
 autorestart=true
 stopasgroup=true
 killasgroup=true
@@ -18,8 +18,8 @@ stopwaitsecs=3600
 process_name=%(program_name)s
 command=php /var/www/html/artisan short-schedule:run
 directory=/var/www/html/
-autostart=true
-autorestart=unexpected
+autostart=false
+autorestart=true
 stopasgroup=true
 killasgroup=true
 user=webuser
@@ -30,11 +30,27 @@ stdout_logfile_maxbytes=10MB
 logfile_backups=10
 stopwaitsecs=3600
 
+[program:laravel-queue]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/html/artisan queue:work --sleep=2 --max-time=3600 --memory=256
+directory=/var/www/html/
+autostart=false
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=webuser
+numprocs=4
+redirect_stderr=true
+stdout_logfile=/var/log/supervisor/laravel-queue.log
+stdout_logfile_maxbytes=10MB
+logfile_backups=10
+stopwaitsecs=3600
+
 [program:laravel-horizon]
-process_name=%(program_name)s
+process_name=%(program_name)s_%(process_num)02d
 command=php /var/www/html/artisan horizon
 directory=/var/www/html/
-autostart=true
+autostart=false
 autorestart=true
 redirect_stderr=true
 user=webuser
