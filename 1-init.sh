@@ -19,6 +19,7 @@ read -e -p $'Enter \e[33mPHP-Version\033[0m (7.4, 8.0, 8.1, 8.2):\n' -i "8.2" ST
 read -e -p $'Enter \e[33mStack Network-Name\033[0m (no spaces!):\n' -i "larastack-network" DC_NETWORK_NAME
 
 # ############################################## end getting vars
+rm -rf .git .dev
 mkdir -p ./data/{mongo,mysql,pgsql,redis}
 
 # create .env file
