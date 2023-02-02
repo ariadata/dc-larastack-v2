@@ -28,9 +28,3 @@ docker-compose exec -u webuser supervisor supervisorctl restart all
 # echo done message with green color that stack is ready
 echo -e "\e[32mDone! Your stack is ready!\033[0m\nNow you can visit \e[33mhttp://localhost\033[0m to see your app.\n"
 
-# ask user witch command do you want tu use , and put in inside $COMMAND variable
-# put in $COMMAND inside this : docker-compose exec workspace su webuser -c 'here!'
-read -p "Do you want to run a command inside the container? [y/N] " -n 1 -r
-
-# set this to bash_alias file to run commands inside stack with larastack command
-
