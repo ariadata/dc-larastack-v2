@@ -1,0 +1,3 @@
+Create a single bash installer without cloning.
+Check if git, curl, and other necessary tools are installed.
+Fix the DB_CONNECTION in srv/.env file to use either mysql or pgsql.

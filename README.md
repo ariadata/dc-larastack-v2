@@ -21,13 +21,17 @@
 ### This needs `dockerhost` , install from [here](https://github.com/ariadata/dockerhost-sh)
 
 ---
-# ✅ Usage : 
+# ✅ Usage :
 ### 1️⃣ Config bash_aliases
 Copy these lines into `.bash_aliases` or `.bashrc` of your system :
 ```bash
 alias larastack='docker-compose exec -u webuser workspace'
 alias larastack-supervisor='docker-compose exec -u webuser supervisor supervisorctl'
 alias lpa='larastack php artisan'
+lpa() {
+    echo "Running lpa command: $@"
+    larastack php artisan $@
+}
 ```
 ### 2️⃣ Initialize
 ```bash
@@ -76,5 +80,3 @@ larastack npm run build
 * `larastack` is alias for `docker-compose exec -u webuser workspace`
 * `larastack-supervisor` is alias for `docker-compose exec -u webuser supervisor supervisorctl`
 * `lpa` is alias for `larastack php artisan`
-
-

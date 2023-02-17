@@ -5,6 +5,14 @@ cd "$(dirname "$0")"
 SYSTEM_DEFAULT_TIMEZONE="$(cat /etc/timezone)"
 STACK_UID="$(id -u)"
 STACK_GID="$(id -g)"
+
+#if ! command -v git &> /dev/null
+#then
+#    echo "git could not be found, please install it first."
+#    echo "sudo apt install git or sudo yum install git"
+#    exit
+#fi
+
 # ############################################## start getting vars
 # get project name
 read -e -p $'Enter \e[33mStack-Name\033[0m (no spaces!):\n' -i "larastack" DC_COMPOSE_PROJECT_NAME
@@ -98,4 +106,3 @@ fi
 
 clear
 echo -e "\e[32mDone! Your stack is ready!\033[0m\nNow you can run \e[33mbash 2-up-run-stack.sh \033[0m to build and start your stack.\n"
-
