@@ -34,7 +34,7 @@ mkdir -p ./data/{mongo,mysql,pgsql,redis}
 cp .env.example .env
 
 # create src folder and copy .env.example to src/.env
-git clone https://github.com/ariadata/dc-larastack-v2-laravel-basic.git src
+git clone https://github.com/ariadata/dc-larastack-v2-laravel-10-basic.git src
 rm -rf ./src/.git
 cp ./src/.env.example ./src/.env
 
