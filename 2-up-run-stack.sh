@@ -5,6 +5,7 @@ cd "$(dirname "$0")"
 docker-compose down
 docker-compose pull
 docker-compose up -d
+sleep 7
 docker-compose exec -u webuser workspace composer update
 docker-compose exec -u webuser workspace php artisan key:generate
 docker-compose exec -u webuser workspace php artisan migrate:fresh --force
@@ -27,4 +28,3 @@ docker-compose exec -u webuser supervisor supervisorctl restart all
 
 # echo done message with green color that stack is ready
 echo -e "\e[32mDone! Your stack is ready!\033[0m\nNow you can visit \e[33mhttp://localhost\033[0m to see your app.\n"
-

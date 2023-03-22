@@ -34,7 +34,7 @@ mkdir -p ./data/{mongo,mysql,pgsql,redis}
 cp .env.example .env
 
 # create src folder and copy .env.example to src/.env
-git clone https://github.com/ariadata/dc-larastack-v2-laravel-10-basic.git src
+git clone https://github.com/ariadata/dc-larastack-v2-laravel-basic.git src
 rm -rf ./src/.git
 cp ./src/.env.example ./src/.env
 
@@ -62,11 +62,13 @@ sed -i "s|larastack-network-changeme|$DC_NETWORK_NAME|g" docker-compose.yml
 read -e -p $'Choose one of \e[33mmysql,pgsql\033[0m for your RDBMS? \n' -i "mysql" DC_RDBMS
 while [ "$DC_RDBMS" != "mysql" ] && [ "$DC_RDBMS" != "pgsql" ]; do
     read -e -p $'Choose one of \e[33mmysql,pgsql\033[0m for your RDBMS? \n' -i "mysql" DC_RDBMS
-    # set RDBMS to ./src/.env file
-    sed -i "s|DB_CONNECTION=.*|DB_CONNECTION=$DC_RDBMS|g" ./src/.env
 done
+
 # replace "RDBMS_SERVICE_NAME" with $DC_RDBMS in docker-compose.yml
 sed -i "s|RDBMS_SERVICE_NAME|$DC_RDBMS|g" docker-compose.yml
+
+# set RDBMS to ./src/.env file
+sed -i "s|DB_CONNECTION=.*|DB_CONNECTION=$DC_RDBMS|g" ./src/.env
 
 # remove the other service from docker-compose.yml file
 if [ "$DC_RDBMS" == "mysql" ]; then

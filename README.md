@@ -42,7 +42,7 @@ bash 1-init.sh
 
 ### 3️⃣ Prepare and run
 ```bash
-bash 2-prepare.sh
+bash 2-up-run-stack.sh
 ```
 ### ☑️ Usage Commands
 ##### Example commands :
