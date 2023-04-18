@@ -28,7 +28,7 @@ Copy these lines into `.bash_aliases` or `.bashrc` of your system :
 alias larastack='docker-compose exec -u webuser workspace'
 alias larastack-supervisor='docker-compose exec -u webuser supervisor supervisorctl'
 alias lpa='larastack php artisan'
-lpa() {
+function lpa() {
     echo "Running lpa command: $@"
     larastack php artisan $@
 }
