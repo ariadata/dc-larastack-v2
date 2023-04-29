@@ -37,6 +37,9 @@ function lpa() {
 ```bash
 git clone https://github.com/ariadata/dc-larastack-v2.git dc-larastack && cd dc-larastack
 
+# make certs
+openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout ./configs/nginx/ssl/default.key -out ./configs/nginx/ssl/default.crt
+
 bash 1-init.sh
 ```
 
