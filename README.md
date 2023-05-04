@@ -59,7 +59,6 @@ lpa make:controller ExampleController
 lpa key:generate
 lpa migrate:fresh --force
 lpa make:migration create_example_table
-lpa test
 
 # supervisor commands
 larastack-supervisor restart all
@@ -68,6 +67,9 @@ larastack-supervisor restart laravel-schedule laravel-short-schedule horizon:
 
 # pint/clean code
 larastack ./vendor/bin/pint
+
+# Run Tests :
+larastack ./vendor/bin/pest
 
 # system down/up
 docker-compose down
