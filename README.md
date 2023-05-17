@@ -16,7 +16,7 @@
 * Redis
 * [Adminer](https://hub.docker.com/_/adminer/) full
 * npm included
-* fresh custom [laravel 9.x](https://laravel.com/docs/9.x) from [this repo](https://github.com/ariadata/dc-larastack-v2-laravel-basic) that customized for this stack.
+* fresh custom [laravel 10.x](https://laravel.com/docs/9.x) from [this repo](https://github.com/ariadata/dc-larastack-v2-laravel-basic) that customized for this stack.
 
 ### This needs `dockerhost` , install from [here](https://github.com/ariadata/dockerhost-sh)
 
