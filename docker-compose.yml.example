@@ -105,7 +105,7 @@ services:
 
 ##-- PGSQL BOF --##
   pgsql:
-    image: 'postgres:15-bullseye'
+    image: 'postgres:15.3-bullseye'
     container_name: ${COMPOSE_PROJECT_NAME}_pgsql
     restart: unless-stopped
     user: "${UID:-1000}:${GID:-1000}"
@@ -136,10 +136,10 @@ services:
 
 ##-- MONGO BOF --##
   mongo:
-    image: 'mongo:6-focal'
+    image: 'mongo:6.0-jammy'
     container_name: ${COMPOSE_PROJECT_NAME}_mongo
     restart: unless-stopped
-    user: "${UID:-1000}:${GID:-1000}"
+#    user: "${UID:-1000}:${GID:-1000}"
     environment:
       MONGO_INITDB_ROOT_USERNAME: '${DC_MONGO_DB_USER}'
       MONGO_INITDB_ROOT_PASSWORD: '${DC_MONGO_DB_PASS}'
