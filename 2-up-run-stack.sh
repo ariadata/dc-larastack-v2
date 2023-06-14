@@ -11,10 +11,10 @@ docker-compose exec -u webuser workspace php artisan key:generate
 docker-compose exec -u webuser workspace php artisan migrate:fresh --force
 docker-compose exec -u webuser workspace php artisan db:seed --force
 docker-compose exec -u webuser workspace php artisan storage:link
-docker-compose exec -u webuser workspace php artisan route:cache
-docker-compose exec -u webuser workspace php artisan config:cache
-docker-compose exec -u webuser workspace php artisan view:cache
-docker-compose exec -u webuser workspace php artisan optimize
+# docker-compose exec -u webuser workspace php artisan route:cache
+# docker-compose exec -u webuser workspace php artisan config:cache
+# docker-compose exec -u webuser workspace php artisan view:cache
+# docker-compose exec -u webuser workspace php artisan optimize
 # docker-compose exec -u webuser workspace php artisan queue:restart
 # docker-compose exec -u webuser workspace php artisan queue:work --daemon
 
