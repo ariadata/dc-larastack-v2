@@ -94,7 +94,7 @@ if [ "$DC_RDBMS" == "pgsql" ]; then
 fi
 
 # ask if user wants mongo service in stack
-read -e -p $'Do you want to use \e[33mmongo\033[0m in stack? (y/n):\n' -i "y" DC_USE_MONGO
+read -e -p $'Do you want to use \e[33mmongo\033[0m in stack? (y/n):\n' -i "n" DC_USE_MONGO
 if [ "$DC_USE_MONGO" != "y" ]; then
     # clear all lines between "##-- MONGO BOF --##" and "##-- MONGO EOF --##" in docker-compose.yml file
     sed -i '/^##-- MONGO BOF --##$/,/##-- MONGO EOF --##/d' docker-compose.yml
