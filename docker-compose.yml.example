@@ -127,7 +127,7 @@ services:
     #    command: /bin/bash -c "mkdir -p /var/lib/postgresql/data && chown 1000:1000 /var/lib/postgresql/data && chmod -R 777 /var/lib/postgresql/data && postgres"
     # https://bytemeta.vip/repo/docker-library/postgres/issues/917
     healthcheck:
-      test: [ "CMD", "pg_isready", "-U", "${DC_PGSQL_DB_USER}" ]
+      test: [ "CMD", "pg_isready", "-U", "${DC_PGSQL_DB_USER}", "-d", "${DC_PGSQL_DB_NAME}" ]
       timeout: 5s
       retries: 3
     networks:
@@ -160,5 +160,3 @@ services:
       - '${DC_ADMINER_HTTP_PORT:-8089}:80'
     networks:
       - larastack-network-changeme
-
-
