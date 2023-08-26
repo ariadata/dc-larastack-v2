@@ -105,7 +105,7 @@ services:
 
 ##-- PGSQL BOF --##
   pgsql:
-    image: 'postgres:15.3-bullseye'
+    image: 'postgres:15.4-bullseye'
     container_name: ${COMPOSE_PROJECT_NAME}_pgsql
     restart: unless-stopped
     user: "${UID:-1000}:${GID:-1000}"
