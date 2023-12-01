@@ -1,7 +1,7 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 docker-compose up -d
-docker-compose exec -u webuser supervisor supervisorctl stop laravel-schedule laravel-short-schedule laravel-horizon
+docker-compose exec -u webuser supervisor supervisorctl stop laravel-schedule laravel-horizon
 docker-compose exec -u webuser workspace php artisan down
 docker-compose exec -u webuser workspace php artisan route:clear
 docker-compose exec -u webuser workspace php artisan config:clear
@@ -29,5 +29,5 @@ docker-compose exec -u webuser workspace php artisan db:seed --force
 # todo : Other laravel cache here
 # ###
 
-docker-compose exec -u webuser supervisor supervisorctl start laravel-schedule laravel-short-schedule laravel-horizon
+docker-compose exec -u webuser supervisor supervisorctl start laravel-schedule laravel-horizon
 docker-compose exec -u webuser workspace php artisan up
