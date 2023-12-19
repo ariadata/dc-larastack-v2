@@ -80,6 +80,7 @@ larastack npm install
 larastack npm run build
 
 ```
+for `mongodb` check [here](https://www.mongodb.com/compatibility/mongodb-laravel-integration)
 ---
 # 📝 Notes :
 * `larastack` is alias for `docker-compose exec -u webuser workspace`
