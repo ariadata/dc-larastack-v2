@@ -50,7 +50,7 @@ sed -i "s|APP_TIMEZONE=.*|APP_TIMEZONE=\"$STACK_DEFAULT_TZ\"|g" ./src/.env
 sed -i "s|php_value\[date.timezone\] \=.*|php_value\[date.timezone\] \= $STACK_DEFAULT_TZ|g" ./configs/php/www.conf
 
 # set php version to .env.example
-sed -i "s|DC_PHP_VERSION=.*|DC_PHP_VERSION=$STACK_PHP_VERSION|g" .env
+sed -i "s|STACK_PHP_VERSION=.*|STACK_PHP_VERSION=$STACK_PHP_VERSION|g" .env
 
 mv docker-compose.yml.example docker-compose.yml
 
